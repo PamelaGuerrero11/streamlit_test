@@ -1,2 +1,6 @@
-name: my-streamlit-app
-type: streamlit
+definition_version: 1.0
+
+app:
+  type: streamlit
+  scripts:
+    - app.py  # Replace this with the main file of your Streamlit app
