@@ -13,17 +13,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'  # Specify your Python version
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Deploy to Snowflake
+    - name: Build and run the Docker image
       env:
         SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
         SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
@@ -35,8 +28,9 @@ jobs:
         STREAMLIT_APP_NAME: "my_streamlit_app"  # Customize this name
         STREAMLIT_APP_FILE: "app.py"  # The entry point for your Streamlit app
       run: |
-        docker run --rm -v ${{ github.workspace }}:/app \
-        snowflake/snowflake-cli:latest streamlit deploy \
-        --name $STREAMLIT_APP_NAME --file $STREAMLIT_APP_FILE \
-        --database $SNOWSQL_DATABASE --schema $SNOWSQL_SCHEMA \
-        --role $SNOWSQL_ROLE --warehouse $SNOWSQL_WAREHOUSE
+        docker build -t my_streamlit_app .
+        docker run --rm -e SNOWSQL_ACCOUNT=$SNOWSQL_ACCOUNT \
+        -e SNOWSQL_USER=$SNOWSQL_USER -e SNOWSQL_PWD=$SNOWSQL_PWD \
+        -e SNOWSQL_DATABASE=$SNOWSQL_DATABASE -e SNOWSQL_SCHEMA=$SNOWSQL_SCHEMA \
+        -e SNOWSQL_ROLE=$SNOWSQL_ROLE -e SNOWSQL_WAREHOUSE=$SNOWSQL_WAREHOUSE \
+        my_streamlit_app
