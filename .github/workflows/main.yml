@@ -53,4 +53,5 @@ jobs:
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ROLE: 'STREAMLIT_APP_DEVELOPER'
         run: |
+         snow --config-file="~/.snowflake/config.toml" connection CICD
          snow streamlit deploy --replace --connection CICD
