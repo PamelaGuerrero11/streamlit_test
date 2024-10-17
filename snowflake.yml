@@ -1,7 +1,7 @@
 definition_version: 1.1
 
 native_app:
-  scratch_stage: my_streamlit_stage  # Define a custom stage for the app
-  application:
-    main: app.py  # Entry point for your Streamlit app
-    query_warehouse: STREAMLIT_TEST_WH  # Warehouse used for querying
+  name: my_streamlit_app  # Add the app name
+  artifacts:
+    - app.py  # Specify the file(s) included in the deployment
+  scratch_stage: my_streamlit_stage  # Define the custom stage
