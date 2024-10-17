@@ -11,6 +11,11 @@ variables:
   SNOWSQL_WAREHOUSE: $SNOWSQL_WAREHOUSE
   STREAMLIT_APP_NAME: "my_streamlit_app"  # Customize this name
 
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+      when: always
+
 deploy:
   stage: deploy
   image: snowflake/snowflake-cli:latest
@@ -24,6 +29,3 @@ deploy:
     - snowflake streamlit deploy --name $STREAMLIT_APP_NAME --file app.py \
       --database $SNOWSQL_DATABASE --schema $SNOWSQL_SCHEMA --role $SNOWSQL_ROLE \
       --warehouse $SNOWSQL_WAREHOUSE
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
-      when: always  # This triggers the job on push events
