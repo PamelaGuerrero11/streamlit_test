@@ -26,20 +26,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install snowflake-cli==3.0.2
-      - name: 'Create config'
-        shell: bash
-        env:
-            SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-            SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
-            SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-        run: |
-            mkdir -p ~/.snowflake
-            touch ~/.snowflake/config.toml
-            echo "[CICD]" >> ~/.snowflake/config.toml   
-            echo "account = \"$SNOWFLAKE_ACCOUNT\"" >> ~/.snowflake/config.toml
-            echo "user = \"$SNOWFLAKE_USER\"" >> ~/.snowflake/config.toml
-            echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml   
-            chmod 0600 ~/.snowflake/config.toml
+
 
       # Add this step to ensure we're in the right directory
       - name: Change Directory to Root
@@ -53,5 +40,12 @@ jobs:
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ROLE: 'STREAMLIT_APP_DEVELOPER'
         run: |
+         mkdir -p ~/.snowflake
+          touch ~/.snowflake/config.toml
+          echo "[CICD]" >> ~/.snowflake/config.toml   
+          echo "account = \"$SNOWFLAKE_ACCOUNT\"" >> ~/.snowflake/config.toml
+          echo "user = \"$SNOWFLAKE_USER\"" >> ~/.snowflake/config.toml
+          echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml   
+          chmod 0600 ~/.snowflake/config.toml
          snow --config-file="~/.snowflake/config.toml" connection CICD
          snow streamlit deploy --replace --connection CICD
