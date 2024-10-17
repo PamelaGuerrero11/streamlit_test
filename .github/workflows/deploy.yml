@@ -1,28 +1,37 @@
-stages:
-  - deploy
+name: Deploy Streamlit App
 
-variables:
-  SNOWSQL_ACCOUNT: $SNOWSQL_ACCOUNT
-  SNOWSQL_USER: $SNOWSQL_USER
-  SNOWSQL_PWD: $SNOWSQL_PWD
-  SNOWSQL_DATABASE: $SNOWSQL_DATABASE
-  SNOWSQL_SCHEMA: $SNOWSQL_SCHEMA
-  SNOWSQL_ROLE: $SNOWSQL_ROLE
-  SNOWSQL_WAREHOUSE: $SNOWSQL_WAREHOUSE
-  STREAMLIT_APP_NAME: "my_streamlit_app"  # Customize this name
+on:
+  push:
+    branches:
+      - main  # Change this to your default branch if necessary
 
-deploy:
-  stage: deploy
-  image: snowflake/snowflake-cli:latest
-  before_script:
-    - export SNOWSQL_PWD=$SNOWSQL_PWD
-    - snowflake config set accountname $SNOWSQL_ACCOUNT
-    - snowflake config set username $SNOWSQL_USER
-    - snowflake config set password $SNOWSQL_PWD
-    - snowflake config set region $SNOWSQL_ACCOUNT.region
-  script:
-    - snowflake streamlit deploy --name $STREAMLIT_APP_NAME --file app.py \
-      --database $SNOWSQL_DATABASE --schema $SNOWSQL_SCHEMA --role $SNOWSQL_ROLE \
-      --warehouse $SNOWSQL_WAREHOUSE
-  rules:
-    - when: on_success  # This means the job will run on successful previous stages
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SnowSQL
+        env:
+          SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+          SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+          SNOWSQL_DATABASE: ${{ secrets.SNOWSQL_DATABASE }}
+          SNOWSQL_SCHEMA: ${{ secrets.SNOWSQL_SCHEMA }}
+          SNOWSQL_ROLE: ${{ secrets.SNOWSQL_ROLE }}
+          SNOWSQL_WAREHOUSE: ${{ secrets.SNOWSQL_WAREHOUSE }}
+          STREAMLIT_APP_NAME: "my_streamlit_app"  # Customize this name
+        run: |
+          echo "Setting up SnowSQL..."
+          echo "[connections]" >> ~/.snowsql/config
+          echo "accountname = ${SNOWSQL_ACCOUNT}" >> ~/.snowsql/config
+          echo "username = ${SNOWSQL_USER}" >> ~/.snowsql/config
+          echo "password = ${SNOWSQL_PWD}" >> ~/.snowsql/config
+          echo "region = ${SNOWSQL_ACCOUNT#*.} " >> ~/.snowsql/config  # Adjust based on your account format
+
+      - name: Deploy Streamlit App
+        run: |
+          snowflake streamlit deploy --name $STREAMLIT_APP_NAME --file app.py \
+            --database $SNOWSQL_DATABASE --schema $SNOWSQL_SCHEMA --role $SNOWSQL_ROLE \
+            --warehouse $SNOWSQL_WAREHOUSE
