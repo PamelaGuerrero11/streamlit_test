@@ -41,11 +41,11 @@ jobs:
           ROLE: 'STREAMLIT_APP_DEVELOPER'
         run: |
          mkdir -p ~/.snowflake
-          touch ~/.snowflake/config.toml
-          echo "[CICD]" >> ~/.snowflake/config.toml   
-          echo "account = \"$SNOWFLAKE_ACCOUNT\"" >> ~/.snowflake/config.toml
-          echo "user = \"$SNOWFLAKE_USER\"" >> ~/.snowflake/config.toml
-          echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml   
-          chmod 0600 ~/.snowflake/config.toml
+         touch ~/.snowflake/config.toml
+         echo "[CICD]" >> ~/.snowflake/config.toml   
+         echo "account = \"$SNOWFLAKE_ACCOUNT\"" >> ~/.snowflake/config.toml
+         echo "user = \"$SNOWFLAKE_USER\"" >> ~/.snowflake/config.toml
+         echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml   
+         chmod 0600 ~/.snowflake/config.toml
          snow --config-file="~/.snowflake/config.toml" connection CICD
          snow streamlit deploy --replace --connection CICD
