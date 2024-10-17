@@ -58,4 +58,5 @@ jobs:
       - name: 'Deploy the Streamlit app'
         shell: bash
         run: |
+          snow --version
           snow streamlit deploy --replace
