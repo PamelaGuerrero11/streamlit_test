@@ -40,5 +40,5 @@ jobs:
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ROLE: 'STREAMLIT_APP_DEVELOPER'
         run: |
-          snow connection add --connection-name cicd --account $SNOWFLAKE_ACCOUNT --username $SNOWFLAKE_USER --password $SNOWFLAKE_PASSWORD --warehouse '' --role '' --database '' --schema '' --host '' --port 0 --region '' --authenticator '' 
+          snow connection add --connection-name cicd --account $SNOWFLAKE_ACCOUNT --username $SNOWFLAKE_USER --password $SNOWFLAKE_PASSWORD --warehouse '' --role '' --database '' --schema '' --host '' --port 0 --region '' --authenticator '' --private-key '' --private-key-path '' --token-file-path ''
           snow streamlit deploy --replace --connection cicd
