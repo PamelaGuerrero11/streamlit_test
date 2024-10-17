@@ -35,4 +35,4 @@ jobs:
       - name: 'Deploy the Streamlit app'
         shell: bash
         run: |
-          snow streamlit deploy --replace
+          snow streamlit deploy --replace --user ${{env.SNOWFLAKE_USER}} --password ${{env.SNOWFLAKE_PASSWORD}} --account ${{env.SNOWFLAKE_ACCION}} 
