@@ -1,6 +1,7 @@
 definition_version: 1.1
-type: streamlit
-identifier: streamlit_app
-stage: my_streamlit_stage
-query_warehouse: STREAMLIT_TEST_WH
-main_file: app.py
+
+native_app:
+  scratch_stage: my_streamlit_stage  # Define a custom stage for the app
+  application:
+    main: app.py  # Entry point for your Streamlit app
+    query_warehouse: STREAMLIT_TEST_WH  # Warehouse used for querying
