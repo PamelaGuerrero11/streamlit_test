@@ -1,6 +1,5 @@
-definition_version: 1.0
+definition_version: 1.1
 
-app:
-  type: streamlit
-  scripts:
-    - app.py  # Replace this with the main file of your Streamlit app
+resources:
+  - streamlit:
+      entrypoint: app.py   # Replace this with the main file of your Streamlit app
