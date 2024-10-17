@@ -14,12 +14,10 @@ jobs:
 
       - name: Install SnowSQL
         run: |
-          # Download the SnowSQL installer
+          # Download and install SnowSQL using the installer script
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2.28/snowsql-linux_x86_64
-          # Make it executable
-          chmod +x snowsql-linux_x86_64
-          # Move to /usr/local/bin and rename to snowflake
           sudo mv snowsql-linux_x86_64 /usr/local/bin/snowflake
+          sudo chmod +x /usr/local/bin/snowflake
 
       - name: Set up SnowSQL
         env:
