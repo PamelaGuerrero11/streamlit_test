@@ -39,7 +39,5 @@ jobs:
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
         run: |
-          snow configure set account $SNOWFLAKE_ACCOUNT
-          snow configure set username $SNOWFLAKE_USER
-          snow configure set password $SNOWFLAKE_PASSWORD
-          snow streamlit deploy --replace 
+          snow connection add --connection-name cicd --account $SNOWFLAKE_ACCOUNT --username $SNOWFLAKE_USER --password $SNOWFLAKE_PASSWORD
+          snow streamlit deploy --replace --connection cicd
