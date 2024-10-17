@@ -1,36 +1,24 @@
-name: Deploy Streamlit App
-
-on:
-  push:
-    branches:
-      - main  # Change this to your default branch if needed
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-
-    - name: Build and run the Docker image
-      env:
-        SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-        SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
-        SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
-        SNOWSQL_DATABASE: ${{ secrets.SNOWSQL_DATABASE }}
-        SNOWSQL_SCHEMA: ${{ secrets.SNOWSQL_SCHEMA }}
-        SNOWSQL_ROLE: ${{ secrets.SNOWSQL_ROLE }}
-        SNOWSQL_WAREHOUSE: ${{ secrets.SNOWSQL_WAREHOUSE }}
-        STREAMLIT_APP_NAME: "my_streamlit_app"  # Customize this name
-        STREAMLIT_APP_FILE: "app.py"  # The entry point for your Streamlit app
-      run: |
-        docker build -t my_streamlit_app .
-        docker run --rm -e SNOWSQL_ACCOUNT=$SNOWSQL_ACCOUNT \
-        -e SNOWSQL_USER=$SNOWSQL_USER -e SNOWSQL_PWD=$SNOWSQL_PWD \
-        -e SNOWSQL_DATABASE=$SNOWSQL_DATABASE -e SNOWSQL_SCHEMA=$SNOWSQL_SCHEMA \
-        -e SNOWSQL_ROLE=$SNOWSQL_ROLE -e SNOWSQL_WAREHOUSE=$SNOWSQL_WAREHOUSE \
-        my_streamlit_app
+stages:
+  - deploy
+variables:
+  SNOWSQL_ACCOUNT: $SNOWSQL_ACCOUNT
+  SNOWSQL_USER: $SNOWSQL_USER
+  SNOWSQL_PWD: $SNOWSQL_PWD
+  SNOWSQL_DATABASE: $SNOWSQL_DATABASE
+  SNOWSQL_SCHEMA: $SNOWSQL_SCHEMA
+  SNOWSQL_ROLE: $SNOWSQL_ROLE
+  SNOWSQL_WAREHOUSE: $SNOWSQL_WAREHOUSE
+  STREAMLIT_APP_NAME: "my_streamlit_app"  # Customize this name
+deploy:
+  stage: deploy
+  image: snowflake/snowflake-cli:latest
+  before_script:
+    - export SNOWSQL_PWD=$SNOWSQL_PWD
+    - snowflake config set accountname $SNOWSQL_ACCOUNT
+    - snowflake config set username $SNOWSQL_USER
+    - snowflake config set password $SNOWSQL_PWD
+    - snowflake config set region $SNOWSQL_ACCOUNT.region
+  script:
+    - snowflake streamlit deploy --name $STREAMLIT_APP_NAME --file app.py \
+      --database $SNOWSQL_DATABASE --schema $SNOWSQL_SCHEMA --role $SNOWSQL_ROLE \
+      --warehouse $SNOWSQL_WAREHOUSE
