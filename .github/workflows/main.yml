@@ -34,7 +34,7 @@ jobs:
             SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
         run: |
             mkdir -p ~/.snowflake
-            cp config.toml ~/.snowflake/config.toml
+            touch ~/.snowflake/config.toml
             echo "[CICD]" >> ~/.snowflake/config.toml   
             echo "account = \"$SNOWFLAKE_ACCOUNT\"" >> ~/.snowflake/config.toml
             echo "user = \"$SNOWFLAKE_USER\"" >> ~/.snowflake/config.toml
