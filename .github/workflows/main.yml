@@ -34,5 +34,9 @@ jobs:
 
       - name: 'Deploy the Streamlit app'
         shell: bash
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
         run: |
-          snow streamlit deploy --replace --user ${{env.SNOWFLAKE_USER}} --password ${{env.SNOWFLAKE_PASSWORD}} --account ${{env.SNOWFLAKE_ACCION}} 
+          snow streamlit deploy --replace --user $SNOWFLAKE_USER --password $SNOWFLAKE_PASSWORD --account $SNOWFLAKE_ACCOUNT 
