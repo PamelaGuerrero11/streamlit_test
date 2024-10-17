@@ -12,6 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install SnowSQL
+        run: |
+          # Install the Snowflake CLI
+          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2.28/snowsql-linux_x86_64 --output snowsql
+          chmod +x snowsql
+          sudo mv snowsql /usr/local/bin/snowflake  # Move to /usr/local/bin and rename to snowflake
+
       - name: Set up SnowSQL
         env:
           SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
