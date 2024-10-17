@@ -3,7 +3,5 @@ definition_version: 1.1
 native_app:
   name: my_streamlit_app  # Add the app name
   artifacts:
-    - application:
-        main: app.py  # Specify the main application file
+    - path: app.py  # Specify the main application file directly
   scratch_stage: my_streamlit_stage  # Define the custom stage
-
