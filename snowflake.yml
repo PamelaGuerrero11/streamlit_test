@@ -1,8 +1,6 @@
 definition_version: 1
-entities:
-  my_streamlit:
-    type: streamlit
-    identifier: streamlit_app
-    stage: my_streamlit_stage
-    query_warehouse: STREAMLIT_TEST_WH
-    main_file: app.py
+type: streamlit
+identifier: streamlit_app
+stage: my_streamlit_stage
+query_warehouse: STREAMLIT_TEST_WH
+main_file: app.py
