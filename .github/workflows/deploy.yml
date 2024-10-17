@@ -1,32 +1,17 @@
-stages:
-  - deploy
-
-variables:
-  SNOWSQL_ACCOUNT: $SNOWSQL_ACCOUNT
-  SNOWSQL_USER: $SNOWSQL_USER
-  SNOWSQL_PWD: $SNOWSQL_PWD
-  SNOWSQL_DATABASE: $SNOWSQL_DATABASE
-  SNOWSQL_SCHEMA: $SNOWSQL_SCHEMA
-  SNOWSQL_ROLE: $SNOWSQL_ROLE
-  SNOWSQL_WAREHOUSE: $SNOWSQL_WAREHOUSE
-  STREAMLIT_APP_NAME: "my_streamlit_app"  # Customize this name
-
 deploy:
   stage: deploy
-  image: snowflake/snowflake-cli:latest  # Use the official Snowflake CLI image
+  image: snowflake/snowflake-cli:latest
   before_script:
-    # Set up SnowSQL configuration
-    - export SNOWSQL_PWD=$SNOWSQL_PWD  # Ensure password is exported
-    - snowflake config set accountname $SNOWSQL_ACCOUNT  # Configure account name
-    - snowflake config set username $SNOWSQL_USER  # Configure username
-    - snowflake config set password $SNOWSQL_PWD  # Configure password
-    - snowflake config set region $SNOWSQL_ACCOUNT.region  # Configure region
+    - export SNOWSQL_PWD=$SNOWSQL_PWD
+    - snowflake config set accountname $SNOWSQL_ACCOUNT
+    - snowflake config set username $SNOWSQL_USER
+    - snowflake config set password $SNOWSQL_PWD
+    - snowflake config set region $SNOWSQL_ACCOUNT.region
 
   script:
-    # Deploy the Streamlit app to Snowflake
     - snowflake streamlit deploy --name $STREAMLIT_APP_NAME --file app.py \
       --database $SNOWSQL_DATABASE --schema $SNOWSQL_SCHEMA --role $SNOWSQL_ROLE \
       --warehouse $SNOWSQL_WAREHOUSE
 
-  only:
-    - main  # Deploy only from the main branch (adjust as necessary)
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'  # Only run if the branch is main
