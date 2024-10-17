@@ -24,11 +24,12 @@ jobs:
           STREAMLIT_APP_NAME: "my_streamlit_app"  # Customize this name
         run: |
           echo "Setting up SnowSQL..."
+          mkdir -p ~/.snowsql  # Create the directory if it doesn't exist
           echo "[connections]" >> ~/.snowsql/config
           echo "accountname = ${SNOWSQL_ACCOUNT}" >> ~/.snowsql/config
           echo "username = ${SNOWSQL_USER}" >> ~/.snowsql/config
           echo "password = ${SNOWSQL_PWD}" >> ~/.snowsql/config
-          echo "region = ${SNOWSQL_ACCOUNT#*.} " >> ~/.snowsql/config  # Adjust based on your account format
+          echo "region = ${SNOWSQL_ACCOUNT#*.}" >> ~/.snowsql/config  # Adjust based on your account format
 
       - name: Deploy Streamlit App
         run: |
