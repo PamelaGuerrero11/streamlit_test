@@ -27,29 +27,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install snowflake-cli==3.0.2
 
-      - name: 'Create config from secrets'
-        shell: bash
-        env:
-          SNOWCLI_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-          SNOWCLI_USER: ${{ secrets.SNOWSQL_USER }}
-          SNOWCLI_PW: ${{ secrets.SNOWSQL_PW }}
-          SNOWCLI_ROLE: ${{ secrets.SNOWSQL_ROLE }}
-          SNOWCLI_DATABASE: ${{ secrets.SNOWSQL_DATABASE }}
-          SNOWCLI_SCHEMA: ${{ secrets.SNOWSQL_SCHEMA }}
-          SNOWCLI_WAREHOUSE: ${{ secrets.SNOWSQL_WAREHOUSE }}
-        run: |
-          mkdir -p ~/.snowflake
-          cat << EOF > ~/.snowflake/config.toml
-          [connections]
-          account = "$SNOWCLI_ACCOUNT"
-          user = "$SNOWCLI_USER"
-          password = "$SNOWCLI_PW"
-          role = "$SNOWCLI_ROLE"
-          database = "$SNOWCLI_DATABASE"
-          schema = "$SNOWCLI_SCHEMA"
-          warehouse = "$SNOWCLI_WAREHOUSE"
-          EOF
-          chmod 0600 ~/.snowflake/config.toml
 
       # Add this step to ensure we're in the right directory
       - name: Change Directory to Root
@@ -58,5 +35,4 @@ jobs:
       - name: 'Deploy the Streamlit app'
         shell: bash
         run: |
-          snow --version
           snow streamlit deploy --replace
