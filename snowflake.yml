@@ -1,7 +1,11 @@
-definition_version: 1.1
 
-native_app:
-  name: my_streamlit_app  # Add the app name
-  artifacts:
-    - app.py  # Directly specify the application file
-  scratch_stage: my_streamlit_stage  # Define the custom stage
+definition_version: 2
+entities:
+  my_streamlit:
+    type: streamlit
+    identifier: streamlit_app
+    stage: my_streamlit_stage
+    query_warehouse: STREAMLIT_TEST_WH
+    main_file: streamlit_app.py
+    artifacts:
+      - streamlit_app.py
