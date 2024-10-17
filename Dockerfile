@@ -1,16 +1,17 @@
-# Use an official base image
+# Use an official Ubuntu base image
 FROM ubuntu:20.04
 
 # Set environment variables to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install required packages
+# Install required packages and SnowSQL CLI
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl \
     unzip && \
     curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/latest/snowsql-linux_x86_64.zip && \
     unzip snowsql-linux_x86_64.zip && \
+    chmod +x snowsql_install.sh && \  # Ensure install script is executable
     ./snowsql_install.sh --accept-license --skip-installation && \
     rm -rf snowsql-linux_x86_64.zip snowsql_install.sh && \
     apt-get clean && \
