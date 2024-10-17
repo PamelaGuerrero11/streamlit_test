@@ -1,5 +1,4 @@
 definition_version: 1.1
 
-resources:
-  - streamlit:
-      entrypoint: app.py   # Replace this with the main file of your Streamlit app
+streamlit:
+  entrypoint: app.py  # Ensure this points to the correct file
