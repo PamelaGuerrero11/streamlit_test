@@ -34,7 +34,9 @@ jobs:
      # Step 3: Install Snowflake CLI manually (run your custom script)
       - name: Install Snowflake CLI
         shell: bash
-        run: bash $GITHUB_ACTION_PATH/workflows/install-snowcli.sh
+        run: |
+          ls
+          bash $GITHUB_ACTION_PATH/workflows/install-snowcli.sh
         env:
           CLI_VERSION: "latest"  # Replace with a specific version if necessary
 
