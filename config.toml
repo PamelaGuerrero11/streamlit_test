@@ -6,5 +6,6 @@ user = ""
 ACCOUNT = ""
 PRIVATE_KEY_RAW = ""
 AUTHENTICATOR = ""
+ROLE = "streamlit_app_developer"
 
 
