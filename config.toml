@@ -3,3 +3,7 @@ default_connection_name = "myconnection"
 [connections]
 [connections.myconnection]
 user = ""
+ACCOUNT = ""
+PRIVATE_KEY_RAW = ""
+AUTHENTICATOR = ""
+
