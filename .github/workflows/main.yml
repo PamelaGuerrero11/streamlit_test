@@ -52,3 +52,4 @@ jobs:
           ROLE: 'STREAMLIT_APP_DEVELOPER'
         run: |
          snow streamlit deploy --replace --connection CICD
+         
