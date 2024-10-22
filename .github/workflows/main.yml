@@ -7,6 +7,11 @@ on:
 
 env:
   PYTHON_VERSION: '3.10'
+  SNOWFLAKE_CONNECTIONS_MYCONNECTION_AUTHENTICATOR: SNOWFLAKE_JWT
+  SNOWFLAKE_CONNECTIONS_MYCONNECTION_USER: ${{ secrets.SNOWFLAKE_USER }}
+  SNOWFLAKE_CONNECTIONS_MYCONNECTION_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+  SNOWFLAKE_CONNECTIONS_MYCONNECTION_PRIVATE_KEY_RAW: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_RAW }}
+
 
 jobs:
   build-and-deploy:
@@ -14,24 +19,30 @@ jobs:
     environment: dev
     steps:
       - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: 'Install Snowflake CLI'
-        shell: bash
-        run: |
-          python -m pip install --upgrade pip
-          pip install snowflake-cli==3.0.2
+    # Snowflake CLI installation
+      - uses: Snowflake-Labs/snowflake-cli-action@v1.5
+        with:
+          cli-version: "latest"
+          default-config-file-path: "config.toml"
 
 
       # Add this step to ensure we're in the right directory
       - name: Change Directory to Root
         run: cd $GITHUB_WORKSPACE
 
+     # Use the CLI
+      - name: Execute Snowflake CLI command
+        run: |
+          snow --version
+          snow connection test
+          
       - name: 'Deploy the Streamlit app'
         shell: bash
         env:
@@ -40,12 +51,4 @@ jobs:
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
           ROLE: 'STREAMLIT_APP_DEVELOPER'
         run: |
-         mkdir -p ~/.snowflake
-         touch ~/.snowflake/config.toml
-         echo "[CICD]" >> ~/.snowflake/config.toml   
-         echo "account = \"$SNOWFLAKE_ACCOUNT\"" >> ~/.snowflake/config.toml
-         echo "user = \"$SNOWFLAKE_USER\"" >> ~/.snowflake/config.toml
-         echo "password = \"$SNOWFLAKE_PASSWORD\"" >> ~/.snowflake/config.toml   
-         chmod 0600 ~/.snowflake/config.toml
-         snow --config-file="~/.snowflake/config.toml" connection CICD
          snow streamlit deploy --replace --connection CICD
