@@ -36,14 +36,14 @@ jobs:
         shell: bash
         run: |
           ls
-          bash $GITHUB_ACTION_PATH/workflows/install-snowcli.sh
+          bash $GITHUB_ACTION_PATH/install-snowcli.sh
         env:
           CLI_VERSION: "latest"  # Replace with a specific version if necessary
 
       # Step 4: Set up config.toml (run your custom config script)
       - name: Set up Snowflake CLI config file
         shell: bash
-        run: bash $GITHUB_ACTION_PATH/workflows/setup-config-file.sh
+        run: bash $GITHUB_ACTION_PATH/setup-config-file.sh
         env:
           CONFIG_FILE_PATH: $GITHUB_WORKSPACE/config.toml 
 
