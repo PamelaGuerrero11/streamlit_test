@@ -31,11 +31,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-    # Snowflake CLI installation
-      - uses: Snowflake-Labs/snowflake-cli-action@v1.5
-        with:
-          cli-version: "latest"
-          default-config-file-path: "config.toml"
+     # Step 3: Install Snowflake CLI manually (run your custom script)
+      - name: Install Snowflake CLI
+        shell: bash
+        run: bash $GITHUB_WORKSPACE/install-snowcli.sh
+        env:
+          CLI_VERSION: "latest"  # Replace with a specific version if necessary
+
+      # Step 4: Set up config.toml (run your custom config script)
+      - name: Set up Snowflake CLI config file
+        shell: bash
+        run: bash $GITHUB_WORKSPACE/setup-config-file.sh
+        env:
+          CONFIG_FILE_PATH: $GITHUB_WORKSPACE/config.toml 
 
 
       # Add this step to ensure we're in the right directory
