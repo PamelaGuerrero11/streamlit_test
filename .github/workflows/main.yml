@@ -48,7 +48,7 @@ jobs:
         run: |
           bash ./scripts/setup-config-file.sh
         env:
-          CONFIG_FILE_PATH: $GITHUB_WORKSPACE/config.toml 
+          CONFIG_FILE_PATH: ./config.toml 
 
 
       # Add this step to ensure we're in the right directory
