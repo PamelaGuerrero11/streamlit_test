@@ -46,8 +46,7 @@ jobs:
       - name: Set up Snowflake CLI config file
         shell: bash
         run: |
-          cd scripts
-          bash setup-config-file.sh
+          bash ./scripts/setup-config-file.sh
         env:
           CONFIG_FILE_PATH: $GITHUB_WORKSPACE/config.toml 
 
