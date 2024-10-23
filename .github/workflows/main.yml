@@ -36,7 +36,9 @@ jobs:
         shell: bash
         run: |
           ls
-          bash $GITHUB_ACTION_PATH/scripts/install-snowcli.sh
+          cd scripts
+          ls
+          bash install-snowcli.sh
         env:
           CLI_VERSION: "latest"  # Replace with a specific version if necessary
 
